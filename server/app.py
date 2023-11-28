@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource, reqparse
 from models import db, User
-from seed import seed_data
 from flask_migrate import Migrate
 from flask_cors import CORS
 
@@ -65,14 +64,33 @@ class UserLogout(Resource):
         return jsonify({"message": "User logged out successfully"}), 200
 
 # Profile and messaging endpoints (to be extended further)
+class UserProfile(Resource):
+    def get(self, user_id):
+        user = User.query.filter_by(id=user_id).first()
+        if user:
+            popularity = get_popularity(user.vibes_received)
+            return jsonify({
+                "username": user.username,
+                "vibes_received": user.vibes_received,
+                "popularity": popularity
+            })
+        return jsonify({"message": "User not found"}), 404
+
+def get_popularity(vibes_received):
+    if vibes_received <= 10:
+        return "Quite popular... Autographs? 😄"
+    elif 11 <= vibes_received <= 50:
+        return "Almost there. Soon we'll be influencing 😉"
+    elif 51 <= vibes_received <= 100:
+        return "We are there. Vibes pon di vibes 💃"
+    else:
+        return "Superstar! 🌟"  
 
 # Add resources to API
 api.add_resource(UserRegistration, '/register')
 api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
+api.add_resource(UserProfile, '/profile/<string:user_id>')
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        seed_data()  # Optional: Seeds initial data into the database
-    app.run(debug=True)
+    app.run(port=5000, debug=True)

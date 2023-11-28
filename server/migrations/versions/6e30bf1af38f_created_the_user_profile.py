@@ -1,8 +1,8 @@
-"""created the first db
+"""created the user profile
 
-Revision ID: d00b1f87a80e
+Revision ID: 6e30bf1af38f
 Revises: 
-Create Date: 2023-11-28 18:54:19.394001
+Create Date: 2023-11-28 19:48:26.625919
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd00b1f87a80e'
+revision = '6e30bf1af38f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,6 +22,8 @@ def upgrade():
     sa.Column('id', sa.String(), nullable=False),
     sa.Column('username', sa.String(length=50), nullable=False),
     sa.Column('password_hash', sa.String(length=128), nullable=False),
+    sa.Column('interests', sa.String(length=255), nullable=True),
+    sa.Column('vibes_received', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')
     )
