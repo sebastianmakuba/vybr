@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_restful import Api, Resource, reqparse
 from models import db, User
 from flask_migrate import Migrate
@@ -59,9 +59,11 @@ class UserLogin(Resource):
 # User Logout
 class UserLogout(Resource):
     def post(self):
-        # Here, you would handle the logout functionality, such as clearing session data or JWT
-        # This example endpoint only returns a message
-        return jsonify({"message": "User logged out successfully"}), 200
+        # Clear the JWT token cookie by setting it to an empty value and expiring it
+        resp = make_response(jsonify({"message": "User logged out successfully"}), 200)
+        resp.set_cookie('jwt_token', '', expires=0)
+        return resp
+        
 
 # Profile and messaging endpoints (to be extended further)
 class UserProfile(Resource):
