@@ -66,17 +66,24 @@ class UserLogout(Resource):
         
 
 # Profile and messaging endpoints (to be extended further)
+
 class UserProfile(Resource):
     def get(self, user_id):
         user = User.query.filter_by(id=user_id).first()
         if user:
             popularity = get_popularity(user.vibes_received)
-            return jsonify({
+            profile_data = {
                 "username": user.username,
                 "vibes_received": user.vibes_received,
-                "popularity": popularity
-            })
+                "popularity": popularity,
+                "age": user.age,
+                "gender": user.gender,
+                "location": user.location
+                # Other profile data...
+            }
+            return jsonify(profile_data)
         return jsonify({"message": "User not found"}), 404
+
 
 def get_popularity(vibes_received):
     if vibes_received <= 10:

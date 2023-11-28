@@ -8,7 +8,13 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     interests = db.Column(db.String(255))
-    vibes_received = db.Column(db.Integer, default=0)  # Track vibes received
+    vibes_received = db.Column(db.Integer, default=0)
+    gender = db.Column(db.String(10))
+    age = db.Column(db.Integer)
+    location = db.Column(db.String(100))
+    # Track user-related fields...
+
+      # Track vibes received
     # Other profile-related fields...
 
     def set_password(self, password):
